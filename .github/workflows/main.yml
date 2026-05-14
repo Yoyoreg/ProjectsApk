@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04 # تحديد نسخة مستقرة من لينكس
 
     steps:
       - uses: actions/checkout@v4
@@ -15,15 +15,16 @@ jobs:
         run: |
           sudo apt update
           sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-          pip3 install --user --upgrade Cython==0.29.33 buildozer
+          # تثبيت Cython المتوافق وتحديث أدوات البناء
+          pip3 install --user --upgrade Cython==0.29.33 virtualenv setuptools
+          export PATH=$PATH:$HOME/.local/bin
 
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # تقبل التراخيص أولاً لتجنب خطأ 100
-          yes | buildozer android debug || true
-          # المحاولة الثانية للتأكد من إتمام البناء
-          buildozer android debug
+          # قبول التراخيص آلياً وحذف أي بقايا بناء قديم
+          rm -rf .buildozer
+          yes | buildozer android debug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
