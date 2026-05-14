@@ -1,7 +1,7 @@
 [app]
 title = HomeStore
 package.name = homestore
-package.domain = org.marcidia
+package.domain = com.marcidia.apps1
 
 # مسار ملفاتك
 source.dir = .
