@@ -20,8 +20,10 @@ jobs:
       - name: Build with Buildozer
         run: |
           export PATH=$PATH:$HOME/.local/bin
-          # نستخدم 'yes' للموافقة تلقائياً على شروط Android SDK
-          yes | buildozer android debug
+          # تقبل التراخيص أولاً لتجنب خطأ 100
+          yes | buildozer android debug || true
+          # المحاولة الثانية للتأكد من إتمام البناء
+          buildozer android debug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
